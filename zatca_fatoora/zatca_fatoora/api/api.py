@@ -1,3 +1,4 @@
+import os
 import frappe
 from datetime import datetime
 from fatoora import Fatoora
@@ -13,10 +14,14 @@ def get_fatoora_qr(seller_name,tax_number,date,total,tax_amount):
     )
 
     fatoora_obj.qrcode("qr_code.png")
-
+    
     # file = frappe.get_doc("File", "5fd4cf4571")
     with open("qr_code.png", mode="rb") as f:
         frappe.response.filecontent = f.read()
         frappe.response.filename = "qr_code.png"
         frappe.response.type = "download"
         frappe.response.display_content_as = "attachment"
+
+        # now remove the generated QR Code file from server
+        os.remove("qr_code.png")
+        
